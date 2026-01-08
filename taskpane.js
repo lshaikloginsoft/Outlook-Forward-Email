@@ -5,7 +5,7 @@ Office.onReady((info) => {
 });
 
 async function forwardEmail() {
-  const configuredEmail = "report@example.com"; // change to your saved variable
+  const configuredEmail = "lshaik@loginsoft.com"; // change to your saved variable
 
   try {
     const item = Office.context.mailbox.item;
