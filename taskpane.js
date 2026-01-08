@@ -13,28 +13,31 @@ async function forwardEmail() {
     const item = Office.context.mailbox.item;
     console.log("Selected item ID:", item.itemId);
 
-    console.log("Requesting callback token for REST API...");
-    Office.context.mailbox.getCallbackTokenAsync({ isRest: true }, async (result) => {
+    console.log("Requesting Graph API token...");
+    Office.context.mailbox.getCallbackTokenAsync({ isRest: false }, async (result) => {
       console.log("Token request status:", result.status);
 
       if (result.status === Office.AsyncResultStatus.Succeeded) {
         const accessToken = result.value;
-        console.log("Access token retrieved successfully.");
+        console.log("Graph access token retrieved successfully.");
 
-        const restUrl = Office.context.mailbox.restUrl;
-        const itemId = item.itemId;
-        const forwardUrl = `${restUrl}/v2.0/me/messages/${itemId}/forward`;
+        const encodedId = Office.context.mailbox.convertToRestId(
+            item.itemId,
+            Office.MailboxEnums.RestVersion.v2_0
+        );
+        const forwardUrl = `https://graph.microsoft.com/v1.0/me/messages/${encodedId}/forward`;
+
 
         console.log("Forward URL:", forwardUrl);
 
         const payload = {
-          ToRecipients: [{ EmailAddress: { Address: configuredEmail } }],
-          Comment: "Forwarded via Report button"
+          toRecipients: [{ emailAddress: { address: configuredEmail } }],
+          comment: "Forwarded via Report button"
         };
         console.log("Payload:", payload);
 
         try {
-          console.log("Sending forward request...");
+          console.log("Sending forward request to Graph...");
           const response = await fetch(forwardUrl, {
             method: "POST",
             headers: {
@@ -57,7 +60,7 @@ async function forwardEmail() {
           console.error("Error during fetch:", fetchErr);
         }
       } else {
-        console.error("Failed to get access token:", result.error);
+        console.error("Failed to get Graph token:", result.error);
       }
     });
   } catch (err) {

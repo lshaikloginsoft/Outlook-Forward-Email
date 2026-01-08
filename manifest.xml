@@ -38,7 +38,7 @@
   </FormSettings>
   
   <!-- Use least privilege unless you need write access -->
-  <Permissions>ReadItem</Permissions>
+  <Permissions>ReadWriteItem</Permissions>
   
   <Rule xsi:type="RuleCollection" Mode="Or">
     <Rule xsi:type="ItemIs" ItemType="Message" FormType="Read"/>
@@ -98,11 +98,11 @@
       
       <bt:ShortStrings>
         <bt:String id="groupLabel" DefaultValue="Security"/>
-        <bt:String id="buttonLabel" DefaultValue="Report Phishing"/>
+        <bt:String id="buttonLabel" DefaultValue="Forwarding"/>
       </bt:ShortStrings>
       
       <bt:LongStrings>
-        <bt:String id="buttonDescription" DefaultValue="Report this email to your security team."/>
+        <bt:String id="buttonDescription" DefaultValue="Forward this email to your security team."/>
       </bt:LongStrings>
     </Resources>
   </VersionOverrides>
