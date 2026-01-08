@@ -6,17 +6,12 @@ Office.onReady((info) => {
 });
 
 async function forwardEmail() {
-  const configuredEmail = "lshaik@loginsoft.com"; // change to your saved variable
+  const configuredEmail = "lshaik@loginsoft.com"; // your target email
   console.log("Forward button clicked. Target email:", configuredEmail);
 
   try {
     const item = Office.context.mailbox.item;
     console.log("Selected item ID:", item.itemId);
-
-    if (!confirm("Forward this email to " + configuredEmail + "?")) {
-      console.log("User cancelled forwarding.");
-      return;
-    }
 
     console.log("Requesting callback token for REST API...");
     Office.context.mailbox.getCallbackTokenAsync({ isRest: true }, async (result) => {
@@ -54,23 +49,18 @@ async function forwardEmail() {
 
           if (response.ok) {
             console.log("Forward request succeeded.");
-            alert("Email forwarded successfully.");
           } else {
             const error = await response.json();
             console.error("Forward request failed:", error);
-            alert("Failed: " + error.error.message);
           }
         } catch (fetchErr) {
           console.error("Error during fetch:", fetchErr);
-          alert("Network error occurred.");
         }
       } else {
         console.error("Failed to get access token:", result.error);
-        alert("Could not get access token.");
       }
     });
   } catch (err) {
     console.error("Unexpected error:", err);
-    alert("Unexpected error occurred.");
   }
 }
